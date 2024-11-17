@@ -2,8 +2,9 @@ package com.hexagon.events_service.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
+
 import lombok.Setter;
 
 @Getter

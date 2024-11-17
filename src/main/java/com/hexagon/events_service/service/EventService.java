@@ -1,16 +1,14 @@
 package com.hexagon.events_service.service;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.AmqpException;
-
+import com.hexagon.events_service.publisher.RabbitMQJsonProducer;
 import com.hexagon.events_service.dto.EventDTO;
 import com.hexagon.events_service.dto.NotificationDTO;
 import com.hexagon.events_service.entity.Event;
 import com.hexagon.events_service.repository.EventRepository;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +17,12 @@ import java.util.Optional;
 public class EventService {
 
     private final EventRepository eventRepository;
-    private final RabbitTemplate rabbitTemplate;
+    private RabbitMQJsonProducer jsonProducer;
 
     @Autowired
-    public EventService(EventRepository eventRepository, RabbitTemplate rabbitTemplate) {
+    public EventService(EventRepository eventRepository,RabbitMQJsonProducer jsonProducer) {
         this.eventRepository = eventRepository;
-        this.rabbitTemplate = rabbitTemplate;
+        this.jsonProducer = jsonProducer;
     }
 
     public EventDTO createEvent(EventDTO eventDTO) {
@@ -111,7 +109,8 @@ public class EventService {
     }
 
     private void sendNotification(String type, String message) {
-    
+        NotificationDTO notification = new NotificationDTO(type, message,LocalDateTime.now());
+        jsonProducer.sendJsonNotification(notification);
     }
 
 

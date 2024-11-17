@@ -1,4 +1,7 @@
 package com.hexagon.events_service.service;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.AmqpException;
 
 import com.hexagon.events_service.dto.EventDTO;
 import com.hexagon.events_service.dto.NotificationDTO;
@@ -108,11 +111,13 @@ public class EventService {
     }
 
     private void sendNotification(String type, String message) {
-        NotificationDTO notification = new NotificationDTO(
-                type,
-                message,
-                LocalDateTime.now()
-        );
-        rabbitTemplate.convertAndSend("notifications", notification);
+    
     }
+
+
+    
+    
+    
+
+
 }

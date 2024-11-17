@@ -1,5 +1,4 @@
 package com.hexagon.events_service.dto;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;

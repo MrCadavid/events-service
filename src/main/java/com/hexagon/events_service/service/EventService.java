@@ -112,11 +112,4 @@ public class EventService {
         NotificationDTO notification = new NotificationDTO(type, message,LocalDateTime.now());
         jsonProducer.sendJsonNotification(notification);
     }
-
-
-    
-    
-    
-
-
 }

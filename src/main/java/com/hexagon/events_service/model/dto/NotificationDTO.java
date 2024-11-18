@@ -13,4 +13,5 @@ public class NotificationDTO implements Serializable{
     private String type;
     private String message;
     private LocalDateTime timestamp;
+    private Long eventId;
 }

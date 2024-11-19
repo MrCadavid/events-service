@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class NotificationDTO implements Serializable{
-    private String type;
+public class NotificationDTO implements Serializable {
     private String message;
-    private LocalDateTime timestamp;
+    private Long id;
     private Long eventId;
+    private LocalDateTime sentAt;
 }

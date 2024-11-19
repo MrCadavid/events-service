@@ -1,4 +1,4 @@
-package com.hexagon.events_service.service.notification;
+package com.hexagon.events_service.service;
 
 import com.hexagon.events_service.publisher.RabbitMQJsonProducer;
 import com.hexagon.events_service.dto.NotificationDTO;
@@ -23,5 +23,11 @@ public class NotificationService {
     public void notify(NotificationDTO notificationDTO) {
         restTemplate.postForObject(NOTIFICATION_SERVICE_URL, notificationDTO, NotificationDTO.class);
         jsonProducer.sendJsonNotification(notificationDTO);
+    }
+
+    public NotificationDTO createNotification(Long idEvent ,NotificationDTO notificationDTO) {
+
+        return notificationDTO;
+      
     }
 }

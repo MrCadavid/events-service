@@ -4,7 +4,7 @@ import com.hexagon.events_service.dto.EventDTO;
 import com.hexagon.events_service.dto.NotificationDTO;
 import com.hexagon.events_service.entity.Event;
 import com.hexagon.events_service.repository.EventRepository;
-import com.hexagon.events_service.service.notification.NotificationService;
+import com.hexagon.events_service.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,33 +25,35 @@ public class EventService {
     }
 
     public EventDTO createEvent(EventDTO eventDTO) {
-        Event event = new Event(
-                eventDTO.getId(),
-                eventDTO.getType(),
-                eventDTO.getResponsible(),
-                eventDTO.getDate(),
-                eventDTO.getTime(),
-                eventDTO.getLocation()
-        );
-        Event savedEvent = eventRepository.save(event);
+    LocalDateTime now=LocalDateTime.now();    
+    Event event = new Event(
+            eventDTO.getId(),
+            eventDTO.getType(),
+            eventDTO.getResponsible(),
+            eventDTO.getDate(),
+            eventDTO.getLocation(),
+            now, 
+            now
+    );
+    Event savedEvent = eventRepository.save(event);
 
-        NotificationDTO notification = new NotificationDTO(
-        "CREATED", 
-        "Event created",
-        LocalDateTime.now(),
-        savedEvent.getId());
-        notificationService.notify(notification);
+    NotificationDTO notification = new NotificationDTO(
+            "Event created",
+            null,
+            savedEvent.getId(),
+            now
+    );
+    notificationService.notify(notification);
 
-     
-        return new EventDTO(
-                savedEvent.getId(),
-                savedEvent.getType(),
-                savedEvent.getResponsible(),
-                savedEvent.getDate(),
-                savedEvent.getTime(),
-                savedEvent.getLocation()
-        );
-    }
+    return new EventDTO(
+            savedEvent.getId(),
+            savedEvent.getType(),
+            savedEvent.getResponsible(),
+            savedEvent.getDate(),
+            savedEvent.getLocation()
+    );
+}
+
 
     public List<EventDTO> getAllEvents() {
         List<Event> events = eventRepository.findAll();
@@ -60,7 +62,6 @@ public class EventService {
                 event.getType(),
                 event.getResponsible(),
                 event.getDate(),
-                event.getTime(),
                 event.getLocation()
         )).toList();
     }
@@ -72,16 +73,15 @@ public class EventService {
             event.setType(eventDTO.getType());
             event.setResponsible(eventDTO.getResponsible());
             event.setDate(eventDTO.getDate());
-            event.setTime(eventDTO.getTime());
             event.setLocation(eventDTO.getLocation());
             Event updatedEvent = eventRepository.save(event);
 
             NotificationDTO notification = new NotificationDTO(
-            "UPDATED", 
-            "Event updated",
-            LocalDateTime.now(),
-            updatedEvent.getId());
-
+                    "Event updated", 
+                    null, 
+                    updatedEvent.getId(), 
+                    LocalDateTime.now()
+            );
             notificationService.notify(notification);
 
             return new EventDTO(
@@ -89,7 +89,6 @@ public class EventService {
                     updatedEvent.getType(),
                     updatedEvent.getResponsible(),
                     updatedEvent.getDate(),
-                    updatedEvent.getTime(),
                     updatedEvent.getLocation()
             );
         }
@@ -97,22 +96,21 @@ public class EventService {
     }
 
     public boolean deleteEvent(Long id) {
-    Optional<Event> eventOptional = eventRepository.findById(id);
-    if (eventOptional.isPresent()) {
-        Event event = eventOptional.get();
+        Optional<Event> eventOptional = eventRepository.findById(id);
+        if (eventOptional.isPresent()) {
+            Event event = eventOptional.get();
 
-        NotificationDTO notification = new NotificationDTO(
-        "DELETED", 
-        "Event deleted",
-        LocalDateTime.now(),
-        event.getId());
-        notificationService.notify(notification);
+            NotificationDTO notification = new NotificationDTO(
+                    "Event deleted", 
+                    null, 
+                    event.getId(), 
+                    LocalDateTime.now()
+            );
+            notificationService.notify(notification);
 
-        eventRepository.deleteById(id);
-        return true;
+            eventRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
-    return false;
-}
-
-    
 }

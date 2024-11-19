@@ -1,13 +1,12 @@
 package com.hexagon.events_service.entity;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import com.hexagon.events_service.entity.User;
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -18,11 +17,25 @@ import lombok.Setter;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "event_type", nullable = false)
     private String type;
-    private String responsible;
-    private LocalDate date;
-    private LocalTime time;
+
+    @ManyToOne
+    @JoinColumn(name = "organizer_id", nullable = false)
+    private User responsible;
+
+    @Column(name = "event_date", nullable = false)
+    private LocalDateTime date; 
+
+    @Column(nullable = false)
     private String location;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

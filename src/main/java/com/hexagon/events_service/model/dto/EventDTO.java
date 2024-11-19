@@ -1,11 +1,11 @@
 package com.hexagon.events_service.dto;
-import java.time.LocalDate;
-import java.time.LocalTime;
+
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
-
 import lombok.Setter;
+import com.hexagon.events_service.entity.User;
 
 @Getter
 @Setter
@@ -14,8 +14,7 @@ import lombok.Setter;
 public class EventDTO {
     private Long id;
     private String type;
-    private String responsible;  
-    private LocalDate date;      
-    private LocalTime time;      
+    private User responsible;  
+    private LocalDateTime date;      
     private String location;
 }

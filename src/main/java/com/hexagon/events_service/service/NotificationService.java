@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NotificationService {
 
-    private static final String NOTIFICATION_SERVICE_URL = "http://NOTIFICATIONS/api/notifications";
+    private static final String NOTIFICATION_SERVICE_URL = "https://events-service-qn4k.onrender.com";
     private final RestTemplate restTemplate;
     private RabbitMQJsonProducer jsonProducer;
 

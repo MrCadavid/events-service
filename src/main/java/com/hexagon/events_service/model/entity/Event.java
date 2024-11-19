@@ -1,7 +1,10 @@
 package com.hexagon.events_service.entity;
 
 import com.hexagon.events_service.entity.User;
+import com.hexagon.events_service.entity.Notification;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +31,7 @@ public class Event {
     private User responsible;
 
     @Column(name = "event_date", nullable = false)
-    private LocalDateTime date; 
+    private LocalDateTime date;
 
     @Column(nullable = false)
     private String location;
@@ -38,4 +41,5 @@ public class Event {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    
 }

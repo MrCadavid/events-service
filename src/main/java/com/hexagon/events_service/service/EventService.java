@@ -3,14 +3,15 @@ package com.hexagon.events_service.service;
 import com.hexagon.events_service.dto.EventDTO;
 import com.hexagon.events_service.dto.NotificationDTO;
 import com.hexagon.events_service.entity.Event;
+import com.hexagon.events_service.entity.Notification;
 import com.hexagon.events_service.repository.EventRepository;
-import com.hexagon.events_service.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class EventService {
@@ -25,35 +26,29 @@ public class EventService {
     }
 
     public EventDTO createEvent(EventDTO eventDTO) {
-    LocalDateTime now=LocalDateTime.now();    
-    Event event = new Event(
-            eventDTO.getId(),
-            eventDTO.getType(),
-            eventDTO.getResponsible(),
-            eventDTO.getDate(),
-            eventDTO.getLocation(),
-            now, 
-            now
-    );
-    Event savedEvent = eventRepository.save(event);
+        LocalDateTime now = LocalDateTime.now();
+        Event event = new Event(
+                eventDTO.getId(),
+                eventDTO.getType(),
+                eventDTO.getResponsible(),
+                eventDTO.getDate(),
+                eventDTO.getLocation(),
+                now,
+                now
+        );
+        Event savedEvent = eventRepository.save(event);
+        NotificationDTO notification = new NotificationDTO(null, "Event created", savedEvent.getId(), now);
+        this.notificationService.post(notification);
+        this.notificationService.notifyAll(notification);
 
-    NotificationDTO notification = new NotificationDTO(
-            "Event created",
-            null,
-            savedEvent.getId(),
-            now
-    );
-    notificationService.notify(notification);
-
-    return new EventDTO(
-            savedEvent.getId(),
-            savedEvent.getType(),
-            savedEvent.getResponsible(),
-            savedEvent.getDate(),
-            savedEvent.getLocation()
-    );
-}
-
+        return new EventDTO(
+                savedEvent.getId(),
+                savedEvent.getType(),
+                savedEvent.getResponsible(),
+                savedEvent.getDate(),
+                savedEvent.getLocation()
+        );
+    }
 
     public List<EventDTO> getAllEvents() {
         List<Event> events = eventRepository.findAll();
@@ -76,13 +71,9 @@ public class EventService {
             event.setLocation(eventDTO.getLocation());
             Event updatedEvent = eventRepository.save(event);
 
-            NotificationDTO notification = new NotificationDTO(
-                    "Event updated", 
-                    null, 
-                    updatedEvent.getId(), 
-                    LocalDateTime.now()
-            );
-            notificationService.notify(notification);
+            NotificationDTO notification = new NotificationDTO(null, "Event updated", updatedEvent.getId(), LocalDateTime.now());
+            this.notificationService.post(notification);
+            this.notificationService.notifyAll(notification);
 
             return new EventDTO(
                     updatedEvent.getId(),
@@ -95,22 +86,24 @@ public class EventService {
         return null;
     }
 
-    public boolean deleteEvent(Long id) {
+    public boolean deleteEvent(Long id) { 
         Optional<Event> eventOptional = eventRepository.findById(id);
         if (eventOptional.isPresent()) {
             Event event = eventOptional.get();
-
-            NotificationDTO notification = new NotificationDTO(
-                    "Event deleted", 
-                    null, 
-                    event.getId(), 
-                    LocalDateTime.now()
-            );
-            notificationService.notify(notification);
-
-            eventRepository.deleteById(id);
+            NotificationDTO notification = new NotificationDTO(null, "Event deleted", event.getId(), LocalDateTime.now());
+            this.notificationService.post(notification);
+            this.notificationService.notifyAll(notification);
+            eventRepository.delete(event);
             return true;
         }
         return false;
     }
+
+    public NotificationDTO createNotificationForEvent(Long id, NotificationDTO notification) {
+        notification.setEventId(id);
+        this.notificationService.post(notification);
+        this.notificationService.notifyAll(notification);
+        return notification;
+    }
+
 }

@@ -20,14 +20,17 @@ public class NotificationService {
     }
 
     
-    public void notify(NotificationDTO notificationDTO) {
-        restTemplate.postForObject(NOTIFICATION_SERVICE_URL, notificationDTO, NotificationDTO.class);
-        jsonProducer.sendJsonNotification(notificationDTO);
+    public void notifyAll(NotificationDTO notification) {
+        jsonProducer.sendJsonNotification(notification);
     }
 
-    public NotificationDTO createNotification(Long idEvent ,NotificationDTO notificationDTO) {
-
-        return notificationDTO;
-      
+    public void post(NotificationDTO notification) {
+        restTemplate.postForObject(NOTIFICATION_SERVICE_URL, notification, NotificationDTO.class);
     }
+
+    
+
+
+
+    
 }

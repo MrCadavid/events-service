@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NotificationService {
 
-    private static final String NOTIFICATION_SERVICE_URL = "https://cloud-gateway-sg8j.onrender.com/api/notifications";
+    private static final String NOTIFICATION_SERVICE_URL = "https://NOTIFICATIONS/api/notifications";
     private final RestTemplate restTemplate;
     private RabbitMQJsonProducer jsonProducer;
 

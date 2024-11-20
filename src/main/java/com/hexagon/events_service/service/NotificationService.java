@@ -18,19 +18,11 @@ public class NotificationService {
         this.restTemplate = restTemplate;
         this.jsonProducer = jsonProducer;
     }
-
-    
     public void notifyAll(NotificationDTO notification) {
         jsonProducer.sendJsonNotification(notification);
     }
 
     public void post(NotificationDTO notification) {
         restTemplate.postForObject(NOTIFICATION_SERVICE_URL, notification, NotificationDTO.class);
-    }
-
-    
-
-
-
-    
+    } 
 }

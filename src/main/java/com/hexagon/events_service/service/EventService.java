@@ -7,7 +7,6 @@ import com.hexagon.events_service.entity.Notification;
 import com.hexagon.events_service.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -106,4 +105,19 @@ public class EventService {
         return notification;
     }
 
+
+    public EventDTO getEventById(Long id) {
+    Optional<Event> eventOptional = eventRepository.findById(id);
+    if (eventOptional.isPresent()) {
+        Event event = eventOptional.get();
+        return new EventDTO(
+                event.getId(),
+                event.getType(),
+                event.getResponsible(),
+                event.getDate(),
+                event.getLocation()
+        );
+    }
+    return null;
+}
 }
